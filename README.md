@@ -78,11 +78,51 @@ ok
        {cnc,0}]}]}
 ```
 
+## Types ##
+
+```erlang
+pair() = btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
+         ltc_rur | nmc_btc | nvc_btc | usd_rur | eur_usd |
+         trc_btc | ppc_btc | ftc_btc | cnc_btc.
+```
+
 ## Query API
-### ticker/1
-### depth/1
-### trade/1
-### fee/1
+### `ticker/1`
+
+```erlang
+ticker(pair()) -> {error, term()} | {ok,[{high, float()},
+                                         {low, float()},
+                                         {avg, float()},
+                                         {vol, float()},
+                                         {vol_cur, float()},
+                                         {last, float()},
+                                         {buy, float()},
+                                         {sell, float()},
+                                         {updated, non_neg_integer()},
+                                         {server_time,non_neg_integer()}]}.
+```
+### `depth/1`
+```erlang
+depth(pair()) -> {error, term()} | {ok,[{asks, list([float(), float()])},
+                                        {bids, list([float(), float()])}]}.
+```
+
+### `fee/1`
+```erlang
+fee(pair()) -> {error, term()} | {ok, float()}.
+```
+
+### `trades/1`
+```erlang
+trades(pair()) -> {error, term()} | {ok, list([{date, non_neg_integer()},
+                                               {price, float()},
+                                               {amount, float()},
+                                               {tid, non_neg_integer()},
+                                               {price_currency, binary()},
+                                               {item, binary()},
+                                               {trade_type,<<"ask">> |
+                                                           <<"bid>>}])}.
+```
 
 ## Trade API
 ### info/0, info/1
