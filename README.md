@@ -81,54 +81,71 @@ ok
 ## Types ##
 
 ```erlang
-pair() = btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
-         ltc_rur | nmc_btc | nvc_btc | usd_rur | eur_usd |
-         trc_btc | ppc_btc | ftc_btc | cnc_btc.
+pair()   = btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
+            ltc_rur | nmc_btc | nvc_btc | usd_rur | eur_usd |
+            trc_btc | ppc_btc | ftc_btc | cnc_btc.
+rate()   = float().
+amount() = float().
 ```
 
 ## Query API
-### `ticker/1`
+### ticker/1
+Retreive ticker for given currency pair.
 
 ```erlang
 ticker(pair()) -> {error, term()} | {ok,[{high, float()},
-                                         {low, float()},
-                                         {avg, float()},
-                                         {vol, float()},
-                                         {vol_cur, float()},
-                                         {last, float()},
-                                         {buy, float()},
-                                         {sell, float()},
-                                         {updated, non_neg_integer()},
-                                         {server_time,non_neg_integer()}]}.
+                                          {low, float()},
+                                          {avg, float()},
+                                          {vol, float()},
+                                          {vol_cur, float()},
+                                          {last, float()},
+                                          {buy, float()},
+                                          {sell, float()},
+                                          {updated, non_neg_integer()},
+                                          {server_time,non_neg_integer()}]}.
 ```
-### `depth/1`
+### depth/1
+Retreive the order book for currency pair.
 ```erlang
 depth(pair()) -> {error, term()} | {ok,[{asks, list([float(), float()])},
-                                        {bids, list([float(), float()])}]}.
+                                         {bids, list([float(), float()])}]}.
 ```
 
-### `fee/1`
+### fee/1
+Retreive the exchange fee for currency pair.
 ```erlang
 fee(pair()) -> {error, term()} | {ok, float()}.
 ```
 
-### `trades/1`
+### trades/1
+Returns the most recent trades for currency pair.
 ```erlang
 trades(pair()) -> {error, term()} | {ok, list([{date, non_neg_integer()},
-                                               {price, float()},
-                                               {amount, float()},
-                                               {tid, non_neg_integer()},
-                                               {price_currency, binary()},
-                                               {item, binary()},
-                                               {trade_type,<<"ask">> |
-                                                           <<"bid>>}])}.
+                                                {price, float()},
+                                                {amount, float()},
+                                                {tid, non_neg_integer()},
+                                                {price_currency, binary()},
+                                                {item, binary()},
+                                                {trade_type,<<"ask">> |
+                                                            <<"bid">>}])}.
 ```
 
 ## Trade API
 ### info/0, info/1
+Returns profile information including current funds, key privledges, and order
+counts.
+
 ### trade/4, trade/5
+Buy or sell a currency pair at a given rate and amount.
+```erlang
+trade(pair(), buy | sell, rate(), amount()) -> {error, term()} | {ok, ...}.
+```
+
 ### orders/0, orders/1
+Return orders opened, filled, or canceled using the provided API key.
+
 ### cancel_order/1, cancel_order/2
+Cancel an order.
 
 ## Key Management API
 ### add_key/3, add_key/4,
