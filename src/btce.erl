@@ -2,18 +2,19 @@
 
 -export([start/0,
 
+         %% query API
          ticker/1,
          trades/1,
          fee/1,
          depth/1,
 
-         %% private API (key required)
+         %% trade API (key required)
          info/0, info/1,
          orders/0, orders/1,
          cancel_order/1, cancel_order/2,
          trade/4, trade/5,
 
-         %% API key management functions
+         %% key management API
          add_key/3, add_key/4,
          del_key/1,
          get_key/0, get_key/1,
