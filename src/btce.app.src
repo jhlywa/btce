@@ -1,0 +1,16 @@
+{application, btce, [
+	{description, "API for BTC-e"},
+	{vsn, "0.0.1"},
+	{modules, []},
+	{registered, []},
+	{applications, [
+		kernel,
+		stdlib,
+		crypto,
+		public_key,
+        ssl,
+		inets
+	]},
+	{mod, {btce_app, []}},
+	{env, []}
+]}.
