@@ -155,8 +155,7 @@ Cancel an order.
 
 ## Helper Methods
 ### start/0
-### trunc_amount/2
-### trunc_rate/2
+### trunc/3
 
 ## TODO
 - better documentation

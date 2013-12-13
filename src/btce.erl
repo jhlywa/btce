@@ -52,8 +52,7 @@
          set_default_key/1,
 
          %% helpers
-         trunc_amount/2,
-         trunc_rate/2
+         trunc/3
         ]).
 
 -include("btce.hrl").
@@ -72,13 +71,9 @@
 -type trade()       :: buy | sell.
 -type error()       :: {error, term()}.
 
-start() ->
-    ok = start(btce).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% public BTC-E API (api key not required)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %% @doc Retreive the fee for currency pair.
 -spec fee(pair()) -> {ok, number()} | error().
 fee(Pair) ->
@@ -146,7 +141,6 @@ trade(Pair, Action, Rate, Amount, Opts) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% API key management
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 -spec add_key(atom(), string(), string()) -> ok.
 add_key(Name, PublicKey, PrivateKey)->
     add_key(Name, PublicKey, PrivateKey, []).
@@ -170,6 +164,16 @@ get_key(Name) ->
 -spec set_default_key(atom()) -> ok.
 set_default_key(Name) ->
     btce_key_server:set_default_key(Name).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% helpers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+start() ->
+    ok = start(btce).
+
+-spec trunc(pair(), rate | amount, pos_integer()) -> float().
+trunc(Pair, Type, Amount) ->
+    trunc(Amount, decimals(Type, Pair)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% private functions
@@ -231,56 +235,51 @@ encode_form_data(Params) ->
 stringify(_, {method, Method}) ->
     lists:flatten(io_lib:format("method=~s", [Method]));
 stringify(Pair, {amount, Amount}) ->
-    lists:flatten(io_lib:format("amount=~.*f", [amount_decimals(Pair),
-                                                trunc_amount(Pair, Amount)]));
+    Decimals = decimals(amount, Pair),
+    lists:flatten(io_lib:format("amount=~.*f",
+                                [Decimals, trunc(Amount, Decimals)]));
 stringify(Pair, {rate, Rate}) ->
-    lists:flatten(io_lib:format("rate=~.*f", [rate_decimals(Pair),
-                                             trunc_rate(Pair, Rate)]));
+    Decimals = decimals(rate, Pair),
+    lists:flatten(io_lib:format("rate=~.*f",
+                                [Decimals, trunc(Rate, Decimals)]));
 stringify(_, {K, V}) ->
     lists:flatten(io_lib:format("~p=~p", [K, V])).
 
--spec rate_decimals(pair()) -> integer().
-rate_decimals(btc_usd) -> ?RATE_DECIMALS_BTC_USD;
-rate_decimals(btc_rur) -> ?RATE_DECIMALS_BTC_RUR;
-rate_decimals(btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
-rate_decimals(ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
-rate_decimals(ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
-rate_decimals(ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
-rate_decimals(nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
-rate_decimals(nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
-rate_decimals(usd_rur) -> ?RATE_DECIMALS_USD_RUR;
-rate_decimals(eur_usd) -> ?RATE_DECIMALS_EUR_USD;
-rate_decimals(trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
-rate_decimals(ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
-rate_decimals(ftc_btc) -> ?RATE_DECIMALS_FTC_BTC;
-rate_decimals(cnc_btc) -> ?RATE_DECIMALS_CNC_BTC.
+-spec decimals(rate | amount, pair()) -> non_neg_integer().
+decimals(rate, btc_usd) -> ?RATE_DECIMALS_BTC_USD;
+decimals(rate, btc_rur) -> ?RATE_DECIMALS_BTC_RUR;
+decimals(rate, btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
+decimals(rate, ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
+decimals(rate, ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
+decimals(rate, ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
+decimals(rate, nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
+decimals(rate, nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
+decimals(rate, usd_rur) -> ?RATE_DECIMALS_USD_RUR;
+decimals(rate, eur_usd) -> ?RATE_DECIMALS_EUR_USD;
+decimals(rate, trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
+decimals(rate, ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
+decimals(rate, ftc_btc) -> ?RATE_DECIMALS_FTC_BTC;
+decimals(rate, cnc_btc) -> ?RATE_DECIMALS_CNC_BTC;
+decimals(amount, btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
+decimals(amount, btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
+decimals(amount, btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
+decimals(amount, ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
+decimals(amount, ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
+decimals(amount, ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
+decimals(amount, nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
+decimals(amount, nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
+decimals(amount, usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
+decimals(amount, eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
+decimals(amount, trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
+decimals(amount, ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
+decimals(amount, ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
+decimals(amount, cnc_btc) -> ?AMOUNT_DECIMALS_CNC_BTC.
 
--spec trunc_rate(pair(), number()) -> number().
-trunc_rate(Pair, Rate) -> trunc(Rate, rate_decimals(Pair)).
-
--spec amount_decimals(pair()) -> integer().
-amount_decimals(btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
-amount_decimals(btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
-amount_decimals(btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
-amount_decimals(ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
-amount_decimals(ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
-amount_decimals(ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
-amount_decimals(nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
-amount_decimals(nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
-amount_decimals(usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
-amount_decimals(eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
-amount_decimals(trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
-amount_decimals(ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
-amount_decimals(ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
-amount_decimals(cnc_btc) -> ?AMOUNT_DECIMALS_CNC_BTC.
-
-
--spec trunc_amount(pair(), number()) -> number().
-trunc_amount(Pair, Amount) -> trunc(Amount, amount_decimals(Pair)).
-
+%% @doc Truncates a floating point number at a specific number of decimal
+%% places.
 -spec trunc(number(), pos_integer()) -> float().
-trunc(Value, Length) ->
-    Multiplier = math:pow(10, Length),
+trunc(Value, Decimals) ->
+    Multiplier = math:pow(10, Decimals),
     trunc(Value * Multiplier) / Multiplier.
 
 -spec hex(bitstring(), pos_integer()) -> string().
