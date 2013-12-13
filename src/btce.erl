@@ -231,43 +231,52 @@ encode_form_data(Params) ->
 stringify(_, {method, Method}) ->
     lists:flatten(io_lib:format("method=~s", [Method]));
 stringify(Pair, {amount, Amount}) ->
-    lists:flatten(io_lib:format("amount=~p", [trunc_amount(Pair, Amount)]));
+    lists:flatten(io_lib:format("amount=~.*f", [amount_decimals(Pair),
+                                                trunc_amount(Pair, Amount)]));
 stringify(Pair, {rate, Rate}) ->
-    lists:flatten(io_lib:format("rate=~p", [trunc_rate(Pair, Rate)]));
+    lists:flatten(io_lib:format("rate=~.*f", [rate_decimals(Pair),
+                                             trunc_rate(Pair, Rate)]));
 stringify(_, {K, V}) ->
     lists:flatten(io_lib:format("~p=~p", [K, V])).
 
+-spec rate_decimals(pair()) -> integer().
+rate_decimals(btc_usd) -> ?RATE_DECIMALS_BTC_USD;
+rate_decimals(btc_rur) -> ?RATE_DECIMALS_BTC_RUR;
+rate_decimals(btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
+rate_decimals(ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
+rate_decimals(ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
+rate_decimals(ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
+rate_decimals(nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
+rate_decimals(nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
+rate_decimals(usd_rur) -> ?RATE_DECIMALS_USD_RUR;
+rate_decimals(eur_usd) -> ?RATE_DECIMALS_EUR_USD;
+rate_decimals(trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
+rate_decimals(ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
+rate_decimals(ftc_btc) -> ?RATE_DECIMALS_FTC_BTC;
+rate_decimals(cnc_btc) -> ?RATE_DECIMALS_CNC_BTC.
+
 -spec trunc_rate(pair(), number()) -> number().
-trunc_rate(btc_usd, Rate) -> trunc(Rate, ?RATE_DECIMALS_BTC_USD);
-trunc_rate(btc_rur, Rate) -> trunc(Rate, ?RATE_DECIMALS_BTC_RUR);
-trunc_rate(btc_eur, Rate) -> trunc(Rate, ?RATE_DECIMALS_BTC_EUR);
-trunc_rate(ltc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_LTC_BTC);
-trunc_rate(ltc_usd, Rate) -> trunc(Rate, ?RATE_DECIMALS_LTC_USD);
-trunc_rate(ltc_rur, Rate) -> trunc(Rate, ?RATE_DECIMALS_LTC_RUR);
-trunc_rate(nmc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_NMC_BTC);
-trunc_rate(nvc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_NVC_BTC);
-trunc_rate(usd_rur, Rate) -> trunc(Rate, ?RATE_DECIMALS_USD_RUR);
-trunc_rate(eur_usd, Rate) -> trunc(Rate, ?RATE_DECIMALS_EUR_USD);
-trunc_rate(trc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_TRC_BTC);
-trunc_rate(ppc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_PPC_BTC);
-trunc_rate(ftc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_FTC_BTC);
-trunc_rate(cnc_btc, Rate) -> trunc(Rate, ?RATE_DECIMALS_CNC_BTC).
+trunc_rate(Pair, Rate) -> trunc(Rate, rate_decimals(Pair)).
+
+-spec amount_decimals(pair()) -> integer().
+amount_decimals(btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
+amount_decimals(btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
+amount_decimals(btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
+amount_decimals(ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
+amount_decimals(ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
+amount_decimals(ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
+amount_decimals(nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
+amount_decimals(nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
+amount_decimals(usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
+amount_decimals(eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
+amount_decimals(trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
+amount_decimals(ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
+amount_decimals(ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
+amount_decimals(cnc_btc) -> ?AMOUNT_DECIMALS_CNC_BTC.
+
 
 -spec trunc_amount(pair(), number()) -> number().
-trunc_amount(btc_usd, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_BTC_USD);
-trunc_amount(btc_rur, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_BTC_RUR);
-trunc_amount(btc_eur, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_BTC_EUR);
-trunc_amount(ltc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_LTC_BTC);
-trunc_amount(ltc_usd, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_LTC_USD);
-trunc_amount(ltc_rur, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_LTC_RUR);
-trunc_amount(nmc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_NMC_BTC);
-trunc_amount(nvc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_NVC_BTC);
-trunc_amount(usd_rur, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_USD_RUR);
-trunc_amount(eur_usd, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_EUR_USD);
-trunc_amount(trc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_TRC_BTC);
-trunc_amount(ppc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_PPC_BTC);
-trunc_amount(ftc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_FTC_BTC);
-trunc_amount(cnc_btc, Amount) -> trunc(Amount, ?AMOUNT_DECIMALS_CNC_BTC).
+trunc_amount(Pair, Amount) -> trunc(Amount, amount_decimals(Pair)).
 
 -spec trunc(number(), pos_integer()) -> float().
 trunc(Value, Length) ->

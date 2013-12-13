@@ -8,7 +8,7 @@ stringify_test() ->
             {btc_usd, {method, 'OrderList'}, "method=OrderList"},
             {btc_usd, {method, 'CancelOrder'}, "method=CancelOrder"},
 
-            {btc_usd, {amount, 1}, "amount=1.0"},
+            {btc_usd, {amount, 1}, "amount=1.00000000"},
             {btc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {btc_rur, {amount, 1234.123456789}, "amount=1234.12345678"},
             {btc_eur, {amount, 1234.123456789}, "amount=1234.12345678"},
@@ -24,7 +24,8 @@ stringify_test() ->
             {ftc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
             {cnc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
 
-            {btc_usd, {rate, 1}, "rate=1.0"},
+            {btc_usd, {rate, 1}, "rate=1.000"},
+            {btc_usd, {rate, 1000}, "rate=1000.000"},
             {btc_usd, {rate, 1234.123456789}, "rate=1234.123"},
             {btc_rur, {rate, 1234.123456789}, "rate=1234.12345"},
             {btc_eur, {rate, 1234.123456789}, "rate=1234.12345"},
