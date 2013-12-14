@@ -1,7 +1,4 @@
-%%% -*- erlang-indent-level: 4;indent-tabs-mode: nil -*-
-%%% ex: ts=4 sw=4 et
 %%% ---------------------------------------------------------------------------
-%%%
 %%% btce: BTC-e API for Erlang systems
 %%%
 %%% Copyright (c) 2013 Jeff Hlywa (jhlywa@gmail.com)
@@ -26,7 +23,6 @@
 %%% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 %%% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 %%% POSSIBILITY OF SUCH DAMAGE.
-%%%
 %%% ---------------------------------------------------------------------------
 
 -module(btce_sup).
