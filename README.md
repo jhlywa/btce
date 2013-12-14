@@ -156,6 +156,11 @@ Cancel an order.
 ## Helper Methods
 ### start/0
 ### trunc/3
+### pip/1
+Return the smallest price (or rate) change for a given currency pair.
+```erlang
+pip(pair()) -> float().
+```
 
 ## TODO
 - better documentation

@@ -45,6 +45,24 @@ stringify_test() ->
     [?assertEqual(btce:stringify(Pair, Arg), Result) ||
         {Pair, Arg, Result} <- Args].
 
+pip_test() ->
+    PipTests = [{btc_usd, 0.001},
+                {btc_rur, 0.00001},
+                {btc_rur, 0.00001},
+                {btc_eur, 0.00001},
+                {ltc_btc, 0.00001},
+                {ltc_usd, 0.000001},
+                {ltc_rur, 0.00001},
+                {nmc_btc, 0.00001},
+                {nvc_btc, 0.00001},
+                {usd_rur, 0.00001},
+                {eur_usd, 0.00001},
+                {trc_btc, 0.00001},
+                {ppc_btc, 0.00001},
+                {ftc_btc, 0.00001},
+                {cnc_btc, 0.00001}],
+    [?assertEqual(btce:pip(Pair), Pip) || {Pair, Pip} <- PipTests].
+
 ticker_test() ->
     meck:new(httpc),
     meck:expect(httpc, request,

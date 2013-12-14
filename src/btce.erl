@@ -52,7 +52,8 @@
          set_default_key/1,
 
          %% helpers
-         trunc/3
+         trunc/3,
+         pip/1
         ]).
 
 -include("btce.hrl").
@@ -171,9 +172,15 @@ set_default_key(Name) ->
 start() ->
     ok = start(btce).
 
+%% @doc Returns a truncated float based on the type (rate or amount) and the
+%%      currency pair.
 -spec trunc(pair(), rate | amount, pos_integer()) -> float().
 trunc(Pair, Type, Amount) ->
     trunc(Amount, decimals(Type, Pair)).
+
+%% @doc Return the smallest rate increment for the currency pair.
+pip(Pair) ->
+    math:pow(10, -decimals(rate, Pair)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% private functions
@@ -276,7 +283,7 @@ decimals(amount, ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
 decimals(amount, cnc_btc) -> ?AMOUNT_DECIMALS_CNC_BTC.
 
 %% @doc Truncates a floating point number at a specific number of decimal
-%% places.
+%%      places.
 -spec trunc(number(), pos_integer()) -> float().
 trunc(Value, Decimals) ->
     Multiplier = math:pow(10, Decimals),
