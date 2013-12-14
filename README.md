@@ -10,7 +10,7 @@ the key management API.
 started prior to use (`btce:start()`).
 
 * A valid BTC-e api key is required for all _trading_ API calls.  See
-[BTC-e]https://btc-e.com/profile#api_keys for more information.
+[BTC-e](https://btc-e.com/profile#api_keys) for more information.
 
 * The BTC-e trading API uses an incrementing nonce to avoid replay attacks.
 Concurrently executed trade API calls should use unique API keys to avoid
@@ -82,8 +82,8 @@ ok
 
 ```erlang
 pair()   = btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
-            ltc_rur | nmc_btc | nvc_btc | usd_rur | eur_usd |
-            trc_btc | ppc_btc | ftc_btc | cnc_btc.
+           ltc_rur | nmc_btc | nvc_btc | usd_rur | eur_usd |
+           trc_btc | ppc_btc | ftc_btc | cnc_btc.
 rate()   = float().
 amount() = float().
 ```
@@ -94,21 +94,21 @@ Retreive ticker for given currency pair.
 
 ```erlang
 ticker(pair()) -> {error, term()} | {ok,[{high, float()},
-                                          {low, float()},
-                                          {avg, float()},
-                                          {vol, float()},
-                                          {vol_cur, float()},
-                                          {last, float()},
-                                          {buy, float()},
-                                          {sell, float()},
-                                          {updated, non_neg_integer()},
-                                          {server_time,non_neg_integer()}]}.
+                                         {low, float()},
+                                         {avg, float()},
+                                         {vol, float()},
+                                         {vol_cur, float()},
+                                         {last, float()},
+                                         {buy, float()},
+                                         {sell, float()},
+                                         {updated, non_neg_integer()},
+                                         {server_time,non_neg_integer()}]}.
 ```
 ### depth/1
 Retreive the order book for currency pair.
 ```erlang
 depth(pair()) -> {error, term()} | {ok,[{asks, list([float(), float()])},
-                                         {bids, list([float(), float()])}]}.
+                                        {bids, list([float(), float()])}]}.
 ```
 
 ### fee/1
@@ -121,13 +121,13 @@ fee(pair()) -> {error, term()} | {ok, float()}.
 Returns the most recent trades for currency pair.
 ```erlang
 trades(pair()) -> {error, term()} | {ok, list([{date, non_neg_integer()},
-                                                {price, float()},
-                                                {amount, float()},
-                                                {tid, non_neg_integer()},
-                                                {price_currency, binary()},
-                                                {item, binary()},
-                                                {trade_type,<<"ask">> |
-                                                            <<"bid">>}])}.
+                                               {price, float()},
+                                               {amount, float()},
+                                               {tid, non_neg_integer()},
+                                               {price_currency, binary()},
+                                               {item, binary()},
+                                               {trade_type,<<"ask">> |
+                                                           <<"bid">>}])}.
 ```
 
 ## Trade API
@@ -163,6 +163,7 @@ pip(pair()) -> float().
 ```
 
 ## TODO
+- update to support latest currency pairs
 - better documentation
 - add remaining trade API methods (trans_history, trade_history)
 - add more tests (use PropEr)
