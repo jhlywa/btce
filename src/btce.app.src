@@ -1,16 +1,15 @@
-{application, btce, [
-	{description, "API for BTC-e"},
-	{vsn, "0.0.1"},
-	{modules, []},
-	{registered, []},
-	{applications, [
-		kernel,
-		stdlib,
-		crypto,
-		public_key,
-        ssl,
-		inets
-	]},
-	{mod, {btce_app, []}},
-	{env, []}
-]}.
+{application, btce,
+ [{description, "API for BTC-e"},
+  {vsn, "0.0.1"},
+  {modules, [btce, btce_app, btce_key_server, btce_sup]},
+  {registered, [btce_key_server, btce_sup]},
+  {applications, [kernel,
+                  stdlib,
+                  crypto,
+                  public_key,
+                  ssl,
+                  inets]},
+  {included_applications, [jsx]},
+  {mod, {btce_app, []}},
+  {env, []}
+ ]}.
