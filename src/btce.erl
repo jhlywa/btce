@@ -255,28 +255,36 @@ decimals(rate, btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
 decimals(rate, ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
 decimals(rate, ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
 decimals(rate, ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
+decimals(rate, ltc_eur) -> ?RATE_DECIMALS_LTC_EUR;
 decimals(rate, nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
+decimals(rate, nmc_usd) -> ?RATE_DECIMALS_NMC_USD;
 decimals(rate, nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
+decimals(rate, nvc_usd) -> ?RATE_DECIMALS_NVC_USD;
 decimals(rate, usd_rur) -> ?RATE_DECIMALS_USD_RUR;
 decimals(rate, eur_usd) -> ?RATE_DECIMALS_EUR_USD;
 decimals(rate, trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
 decimals(rate, ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
+decimals(rate, ppc_usd) -> ?RATE_DECIMALS_PPC_USD;
 decimals(rate, ftc_btc) -> ?RATE_DECIMALS_FTC_BTC;
-decimals(rate, cnc_btc) -> ?RATE_DECIMALS_CNC_BTC;
+decimals(rate, xpm_btc) -> ?RATE_DECIMALS_XPM_BTC;
 decimals(amount, btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
 decimals(amount, btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
 decimals(amount, btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
 decimals(amount, ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
 decimals(amount, ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
 decimals(amount, ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
+decimals(amount, ltc_eur) -> ?AMOUNT_DECIMALS_LTC_EUR;
 decimals(amount, nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
+decimals(amount, nmc_usd) -> ?AMOUNT_DECIMALS_NMC_USD;
 decimals(amount, nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
+decimals(amount, nvc_usd) -> ?AMOUNT_DECIMALS_NVC_USD;
 decimals(amount, usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
 decimals(amount, eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
 decimals(amount, trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
 decimals(amount, ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
+decimals(amount, ppc_usd) -> ?AMOUNT_DECIMALS_PPC_USD;
 decimals(amount, ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
-decimals(amount, cnc_btc) -> ?AMOUNT_DECIMALS_CNC_BTC.
+decimals(amount, xpm_btc) -> ?AMOUNT_DECIMALS_XPM_BTC.
 
 %% @doc Truncates a floating point number at a specific number of decimal
 %%      places.
