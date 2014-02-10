@@ -48,7 +48,6 @@
 
          %% helpers
          start/0,
-         trunc/3,
          pip/1
         ]).
 
@@ -169,12 +168,6 @@ set_default_key(Name) ->
 start() ->
     ok = start(btce).
 
-%% @doc Returns a truncated float based on the type (rate or amount) and the
-%%      currency pair.
--spec trunc(pair(), rate | amount, pos_integer()) -> float().
-trunc(Pair, Type, Amount) ->
-    trunc(Amount, decimals(Type, Pair)).
-
 %% @doc Return the smallest rate increment for the currency pair.
 pip(Pair) ->
     math:pow(10, -decimals(rate, Pair)).
@@ -240,12 +233,10 @@ stringify(_, {method, Method}) ->
     lists:flatten(io_lib:format("method=~s", [Method]));
 stringify(Pair, {amount, Amount}) ->
     Decimals = decimals(amount, Pair),
-    lists:flatten(io_lib:format("amount=~.*f",
-                                [Decimals, trunc(Amount, Decimals)]));
+    lists:flatten(io_lib:format("amount=~s", [digits(Amount, Decimals)]));
 stringify(Pair, {rate, Rate}) ->
     Decimals = decimals(rate, Pair),
-    lists:flatten(io_lib:format("rate=~.*f",
-                                [Decimals, trunc(Rate, Decimals)]));
+    lists:flatten(io_lib:format("rate=~s", [digits(Rate, Decimals)]));
 stringify(_, {K, V}) ->
     lists:flatten(io_lib:format("~p=~p", [K, V])).
 
@@ -287,12 +278,15 @@ decimals(amount, ppc_usd) -> ?AMOUNT_DECIMALS_PPC_USD;
 decimals(amount, ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
 decimals(amount, xpm_btc) -> ?AMOUNT_DECIMALS_XPM_BTC.
 
-%% @doc Truncates a floating point number at a specific number of decimal
-%%      places.
--spec trunc(number(), pos_integer()) -> float().
-trunc(Value, Decimals) ->
-    Multiplier = math:pow(10, Decimals),
-    trunc(Value * Multiplier) / Multiplier.
+%% @doc Return a string representation of a floating point number with a
+%% specific number of decimal places.  This is next to impossible to do
+%% without the help of mochinum (see
+%% http://bob.ippoli.to/archives/2007/12/17/printing-floats-with-erlang/)
+%% for more info.
+-spec digits(number(), pos_integer()) -> string().
+digits(Value, Decimals) ->
+    [Integral, Fractional] = string:tokens(mochinum:digits(Value * 1.0), "."),
+    Integral ++ "." ++ string:left(Fractional, Decimals, $0).
 
 -spec hex(bitstring(), pos_integer()) -> string().
 hex(Bin, Length) when is_bitstring(Bin) ->

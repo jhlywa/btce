@@ -9,6 +9,7 @@ stringify_test() ->
             {btc_usd, {method, 'CancelOrder'}, "method=CancelOrder"},
 
             {btc_usd, {amount, 1}, "amount=1.00000000"},
+            {btc_usd, {amount, 1.0e3}, "amount=1000.00000000"},
             {btc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {btc_rur, {amount, 1234.123456789}, "amount=1234.12345678"},
             {btc_eur, {amount, 1234.123456789}, "amount=1234.12345678"},
