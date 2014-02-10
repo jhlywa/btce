@@ -72,6 +72,11 @@ pip_test() ->
     [?assertEqual(btce:pip(Pair), Pip) || {Pair, Pip} <- PipTests].
 
 ticker_test() ->
+    do_ticker_test(code:which(meck)).
+
+do_ticker_test(non_existing) ->
+    ?debugMsg("meck not found, skipping ticker_test");
+do_ticker_test(_) ->
     meck:new(httpc),
     meck:expect(httpc, request,
                 fun(_, _, _, _) ->
@@ -99,6 +104,11 @@ ticker_test() ->
     meck:unload(httpc).
 
 fee_test() ->
+    do_fee_test(code:which(meck)).
+
+do_fee_test(non_existing) ->
+    ?debugMsg("meck not found, skipping fee_test");
+do_fee_test(_) ->
     meck:new(httpc),
     meck:expect(httpc, request,
                 fun(_, _, _, _) ->
@@ -112,6 +122,11 @@ fee_test() ->
     meck:unload(httpc).
 
 depth_test() ->
+    do_depth_test(code:which(meck)).
+
+do_depth_test(non_existing) ->
+    ?debugMsg("meck not found, skipping depth_test");
+do_depth_test(_) ->
     meck:new(httpc),
     meck:expect(httpc, request,
                 fun(_, _, _, _) ->
