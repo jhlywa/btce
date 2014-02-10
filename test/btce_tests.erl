@@ -16,13 +16,16 @@ stringify_test() ->
             {ltc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {ltc_rur, {amount, 1234.123456789}, "amount=1234.12345678"},
             {nmc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
+            {nmc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {nvc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
+            {nvc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {usd_rur, {amount, 1234.123456789}, "amount=1234.12345678"},
             {eur_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {trc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
             {ppc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
+            {ppc_usd, {amount, 1234.123456789}, "amount=1234.12345678"},
             {ftc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
-            {cnc_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
+            {xpm_btc, {amount, 1234.123456789}, "amount=1234.12345678"},
 
             {btc_usd, {rate, 1}, "rate=1.000"},
             {btc_usd, {rate, 1000}, "rate=1000.000"},
@@ -33,13 +36,16 @@ stringify_test() ->
             {ltc_usd, {rate, 1234.123456789}, "rate=1234.123456"},
             {ltc_rur, {rate, 1234.123456789}, "rate=1234.12345"},
             {nmc_btc, {rate, 1234.123456789}, "rate=1234.12345"},
+            {nmc_usd, {rate, 1234.123456789}, "rate=1234.123"},
             {nvc_btc, {rate, 1234.123456789}, "rate=1234.12345"},
+            {nvc_usd, {rate, 1234.123456789}, "rate=1234.123"},
             {usd_rur, {rate, 1234.123456789}, "rate=1234.12345"},
             {eur_usd, {rate, 1234.123456789}, "rate=1234.12345"},
             {trc_btc, {rate, 1234.123456789}, "rate=1234.12345"},
             {ppc_btc, {rate, 1234.123456789}, "rate=1234.12345"},
+            {ppc_usd, {rate, 1234.123456789}, "rate=1234.123"},
             {ftc_btc, {rate, 1234.123456789}, "rate=1234.12345"},
-            {cnc_btc, {rate, 1234.123456789}, "rate=1234.12345"}
+            {xpm_btc, {rate, 1234.123456789}, "rate=1234.12345"}
            ],
 
     [?assertEqual(btce:stringify(Pair, Arg), Result) ||
@@ -48,19 +54,21 @@ stringify_test() ->
 pip_test() ->
     PipTests = [{btc_usd, 0.001},
                 {btc_rur, 0.00001},
-                {btc_rur, 0.00001},
                 {btc_eur, 0.00001},
                 {ltc_btc, 0.00001},
                 {ltc_usd, 0.000001},
                 {ltc_rur, 0.00001},
                 {nmc_btc, 0.00001},
+                {nmc_usd, 0.001},
                 {nvc_btc, 0.00001},
+                {nvc_usd, 0.001},
                 {usd_rur, 0.00001},
                 {eur_usd, 0.00001},
                 {trc_btc, 0.00001},
                 {ppc_btc, 0.00001},
+                {ppc_usd, 0.001},
                 {ftc_btc, 0.00001},
-                {cnc_btc, 0.00001}],
+                {xpm_btc, 0.00001}],
     [?assertEqual(btce:pip(Pair), Pip) || {Pair, Pip} <- PipTests].
 
 ticker_test() ->
