@@ -61,8 +61,8 @@
 %% BTCE types
 -type pair()        :: btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
                        ltc_rur | ltc_eur | nmc_btc | nmc_usd | nvc_btc |
-                       nvc_usd | usd_rur | eur_usd | trc_btc | ppc_btc |
-                       ppc_usd | ftc_btc | xpm_btc.
+                       nvc_usd | usd_rur | eur_usd | eur_rur | trc_btc |
+                       ppc_btc | ppc_usd | ftc_btc | xpm_btc.
 -type opts()        :: proplists:proplist().
 -type http_method() :: get | post.
 -type trade()       :: buy | sell.
@@ -254,6 +254,7 @@ decimals(rate, nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
 decimals(rate, nvc_usd) -> ?RATE_DECIMALS_NVC_USD;
 decimals(rate, usd_rur) -> ?RATE_DECIMALS_USD_RUR;
 decimals(rate, eur_usd) -> ?RATE_DECIMALS_EUR_USD;
+decimals(rate, eur_rur) -> ?RATE_DECIMALS_EUR_RUR;
 decimals(rate, trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
 decimals(rate, ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
 decimals(rate, ppc_usd) -> ?RATE_DECIMALS_PPC_USD;
@@ -272,6 +273,7 @@ decimals(amount, nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
 decimals(amount, nvc_usd) -> ?AMOUNT_DECIMALS_NVC_USD;
 decimals(amount, usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
 decimals(amount, eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
+decimals(amount, eur_rur) -> ?AMOUNT_DECIMALS_EUR_RUR;
 decimals(amount, trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
 decimals(amount, ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
 decimals(amount, ppc_usd) -> ?AMOUNT_DECIMALS_PPC_USD;

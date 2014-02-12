@@ -83,8 +83,8 @@ ok
 ```erlang
 pair()   = btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
            ltc_rur | ltc_eur | nmc_btc | nmc_usd | nvc_btc |
-           nvc_usd | usd_rur | eur_usd | trc_btc | ppc_btc |
-           ppc_usd | ftc_btc | xpm_btc.
+           nvc_usd | usd_rur | eur_usd | eur_rur | trc_btc |
+           ppc_btc | ppc_usd | ftc_btc | xpm_btc.
 rate()   = float().
 amount() = float().
 ```
