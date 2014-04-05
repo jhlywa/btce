@@ -1,6 +1,6 @@
 {application, btce,
  [{description, "API for BTC-e"},
-  {vsn, "0.0.1"},
+  {vsn, "0.0.2"},
   {modules, [btce, btce_app, btce_key_server, btce_sup]},
   {registered, [btce_key_server, btce_sup]},
   {applications, [kernel,
