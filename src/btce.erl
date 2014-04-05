@@ -47,8 +47,9 @@
          set_default_key/1,
 
          %% helpers
-         start/0,
-         pip/1
+         pairs/0,
+         pip/1,
+         start/0
         ]).
 
 -include("btce.hrl").
@@ -92,6 +93,9 @@ ticker(Pair) ->
 -spec trades(pair()) -> {ok, proplists:proplist()} | error().
 trades(Pair) ->
     format_result(https(get, format_url(?TRADES_URL, Pair))).
+
+%% @doc Return the supported currency pairs.
+pairs() -> ?PAIRS.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% private BTC-E API (api key required)

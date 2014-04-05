@@ -1,3 +1,9 @@
+%% define supported currency pairs
+-define(PAIRS, [btc_usd, btc_rur, btc_eur, btc_cnh, btc_gbp, ltc_btc, ltc_usd,
+                ltc_rur, ltc_eur, ltc_cnh, ltc_gbp, nmc_btc, nmc_usd, nvc_btc,
+                nvc_usd, usd_rur, eur_usd, eur_rur, usd_cnh, gbp_usd, trc_btc,
+                ppc_btc, ppc_usd, ftc_btc, xpm_btc]).
+
 %% public api urls
 -define(TICKER_URL, "https://btc-e.com/api/2/~p/ticker").
 -define(DEPTH_URL, "https://btc-e.com/api/2/~p/depth").
