@@ -59,10 +59,12 @@
 -endif.
 
 %% BTCE types
--type pair()        :: btc_usd | btc_rur | btc_eur | ltc_btc | ltc_usd |
-                       ltc_rur | ltc_eur | nmc_btc | nmc_usd | nvc_btc |
-                       nvc_usd | usd_rur | eur_usd | eur_rur | trc_btc |
-                       ppc_btc | ppc_usd | ftc_btc | xpm_btc.
+-type pair()        :: btc_usd | btc_rur | btc_eur | btc_cnh | btc_gbp |
+                       ltc_btc | ltc_usd | ltc_rur | ltc_eur | ltc_cnh |
+                       ltc_gbp | nmc_btc | nmc_usd | nvc_btc | nvc_usd |
+                       usd_rur | eur_usd | eur_rur | usd_cnh | gbp_usd |
+                       trc_btc | ppc_btc | ppc_usd | ftc_btc | xpm_btc.
+
 -type opts()        :: proplists:proplist().
 -type http_method() :: get | post.
 -type trade()       :: buy | sell.
@@ -244,10 +246,14 @@ stringify(_, {K, V}) ->
 decimals(rate, btc_usd) -> ?RATE_DECIMALS_BTC_USD;
 decimals(rate, btc_rur) -> ?RATE_DECIMALS_BTC_RUR;
 decimals(rate, btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
+decimals(rate, btc_cnh) -> ?RATE_DECIMALS_BTC_CNH;
+decimals(rate, btc_gbp) -> ?RATE_DECIMALS_BTC_GBP;
 decimals(rate, ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
 decimals(rate, ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
 decimals(rate, ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
 decimals(rate, ltc_eur) -> ?RATE_DECIMALS_LTC_EUR;
+decimals(rate, ltc_cnh) -> ?RATE_DECIMALS_LTC_CNH;
+decimals(rate, ltc_gbp) -> ?RATE_DECIMALS_LTC_GBP;
 decimals(rate, nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
 decimals(rate, nmc_usd) -> ?RATE_DECIMALS_NMC_USD;
 decimals(rate, nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
@@ -255,6 +261,8 @@ decimals(rate, nvc_usd) -> ?RATE_DECIMALS_NVC_USD;
 decimals(rate, usd_rur) -> ?RATE_DECIMALS_USD_RUR;
 decimals(rate, eur_usd) -> ?RATE_DECIMALS_EUR_USD;
 decimals(rate, eur_rur) -> ?RATE_DECIMALS_EUR_RUR;
+decimals(rate, usd_cnh) -> ?RATE_DECIMALS_USD_CNH;
+decimals(rate, gbp_usd) -> ?RATE_DECIMALS_GBP_USD;
 decimals(rate, trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
 decimals(rate, ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
 decimals(rate, ppc_usd) -> ?RATE_DECIMALS_PPC_USD;
@@ -263,10 +271,14 @@ decimals(rate, xpm_btc) -> ?RATE_DECIMALS_XPM_BTC;
 decimals(amount, btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
 decimals(amount, btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
 decimals(amount, btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
+decimals(amount, btc_cnh) -> ?AMOUNT_DECIMALS_BTC_CNH;
+decimals(amount, btc_gbp) -> ?AMOUNT_DECIMALS_BTC_GBP;
 decimals(amount, ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
 decimals(amount, ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
 decimals(amount, ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
 decimals(amount, ltc_eur) -> ?AMOUNT_DECIMALS_LTC_EUR;
+decimals(amount, ltc_cnh) -> ?AMOUNT_DECIMALS_LTC_CNH;
+decimals(amount, ltc_gbp) -> ?AMOUNT_DECIMALS_LTC_GBP;
 decimals(amount, nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
 decimals(amount, nmc_usd) -> ?AMOUNT_DECIMALS_NMC_USD;
 decimals(amount, nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
@@ -274,6 +286,8 @@ decimals(amount, nvc_usd) -> ?AMOUNT_DECIMALS_NVC_USD;
 decimals(amount, usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
 decimals(amount, eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
 decimals(amount, eur_rur) -> ?AMOUNT_DECIMALS_EUR_RUR;
+decimals(amount, usd_cnh) -> ?AMOUNT_DECIMALS_USD_CNH;
+decimals(amount, gbp_usd) -> ?AMOUNT_DECIMALS_GBP_USD;
 decimals(amount, trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
 decimals(amount, ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
 decimals(amount, ppc_usd) -> ?AMOUNT_DECIMALS_PPC_USD;
