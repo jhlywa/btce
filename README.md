@@ -149,19 +149,26 @@ Return orders opened, filled, or canceled using the provided API key.
 ### cancel_order/1, cancel_order/2
 Cancel an order.
 
-## Key Management API
-### add_key/3, add_key/4,
-### del_key/1,
-### get_key/0, get_key/1,
-### set_default_key/1,
-
 ## Helper Methods
-### start/0
+### pairs/0
+Return a list of supported currency pairs.
+```erlang
+pairs()-> list(pair()).
+```
+
 ### pip/1
 Return the smallest price (or rate) change for a given currency pair.
 ```erlang
 pip(pair()) -> float().
 ```
+
+### start/0
+
+## Key Management API
+### add_key/3, add_key/4,
+### del_key/1,
+### get_key/0, get_key/1,
+### set_default_key/1,
 
 ## TODO
 - update to support latest currency pairs
