@@ -115,6 +115,7 @@
                        ltc_gbp | nmc_btc | nmc_usd | nvc_btc | nvc_usd |
                        usd_rur | eur_usd | eur_rur | usd_cnh | gbp_usd |
                        trc_btc | ppc_btc | ppc_usd | ftc_btc | xpm_btc.
+-export_type([pair/0]).
 
 -type opts()        :: proplists:proplist().
 -type http_method() :: get | post.
