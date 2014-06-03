@@ -92,7 +92,7 @@ amount() = float().
 
 ## Query API
 ### ticker/1
-Retreive ticker for given currency pair.
+Retrieve ticker for given currency pair.
 
 ```erlang
 ticker(pair()) -> {error, term()} | {ok,[{high, float()},
@@ -107,14 +107,14 @@ ticker(pair()) -> {error, term()} | {ok,[{high, float()},
                                          {server_time,non_neg_integer()}]}.
 ```
 ### depth/1
-Retreive the order book for currency pair.
+Retrieve the order book for currency pair.
 ```erlang
 depth(pair()) -> {error, term()} | {ok,[{asks, list([float(), float()])},
                                         {bids, list([float(), float()])}]}.
 ```
 
 ### fee/1
-Retreive the exchange fee for currency pair.
+Retrieve the exchange fee for currency pair.
 ```erlang
 fee(pair()) -> {error, term()} | {ok, float()}.
 ```
@@ -134,7 +134,7 @@ trades(pair()) -> {error, term()} | {ok, list([{date, non_neg_integer()},
 
 ## Trade API
 ### info/0, info/1
-Returns profile information including current funds, key privledges, and order
+Returns profile information including current funds, key privileges, and order
 counts.
 
 ### trade/4, trade/5
