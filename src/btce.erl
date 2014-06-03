@@ -27,32 +27,82 @@
 
 -module(btce).
 
--export([
-         %% query API
-         ticker/1,
-         trades/1,
-         fee/1,
-         depth/1,
+%% query API
+-export([ticker/1]).
+-export([trades/1]).
+-export([depth/1]).
+-export([fee/1]).
 
-         %% trade API (key required)
-         info/0, info/1,
-         orders/0, orders/1,
-         cancel_order/1, cancel_order/2,
-         trade/4, trade/5,
+%% trade API (key required)
+-export([info/0]).
+-export([info/1]).
+-export([orders/0]).
+-export([orders/1]).
+-export([trade/4]).
+-export([trade/5]).
+-export([cancel_order/1]).
+-export([cancel_order/2]).
 
-         %% key management API
-         add_key/3, add_key/4,
-         del_key/1,
-         get_key/0, get_key/1,
-         set_default_key/1,
+%% key management API
+-export([add_key/3]).
+-export([add_key/4]).
+-export([del_key/1]).
+-export([get_key/0]).
+-export([get_key/1]).
+-export([set_default_key/1]).
 
-         %% helpers
-         pairs/0,
-         pip/1,
-         start/0
-        ]).
+%% helpers
+-export([pairs/0]).
+-export([pip/1]).
+-export([start/0]).
 
--include("btce.hrl").
+%% supported currency pairs
+-define(PAIRS, [btc_usd, btc_rur, btc_eur, btc_cnh, btc_gbp, ltc_btc, ltc_usd,
+                ltc_rur, ltc_eur, ltc_cnh, ltc_gbp, nmc_btc, nmc_usd, nvc_btc,
+                nvc_usd, usd_rur, eur_usd, eur_rur, usd_cnh, gbp_usd, trc_btc,
+                ppc_btc, ppc_usd, ftc_btc, xpm_btc]).
+
+%% URL's used with query API
+-define(TICKER_URL, "https://btc-e.com/api/2/~p/ticker").
+-define(DEPTH_URL, "https://btc-e.com/api/2/~p/depth").
+-define(FEE_URL, "https://btc-e.com/api/2/~p/fee").
+-define(TRADES_URL, "https://btc-e.com/api/2/~p/trades").
+
+%% URL for trade API
+-define(API_URL, "https://btc-e.com/tapi").
+
+%% used when POST'ing data
+-define(CONTENT_TYPE, "application/x-www-form-urlencoded").
+
+%% max decimal places used when submitting a trade ... {rate, amount}
+-define(DECIMALS(P),
+        case P of
+            btc_usd -> {3, 8};
+            btc_rur -> {5, 8};
+            btc_eur -> {5, 8};
+            btc_cnh -> {2, 8};
+            btc_gbp -> {4, 8};
+            ltc_btc -> {5, 8};
+            ltc_usd -> {6, 8};
+            ltc_rur -> {5, 8};
+            ltc_eur -> {3, 8};
+            ltc_cnh -> {2, 8};
+            ltc_gbp -> {3, 8};
+            nmc_btc -> {5, 8};
+            nmc_usd -> {3, 8};
+            nvc_btc -> {5, 8};
+            nvc_usd -> {3, 8};
+            usd_rur -> {5, 8};
+            eur_usd -> {5, 8};
+            eur_rur -> {5, 8};
+            usd_cnh -> {4, 8};
+            gbp_usd -> {4, 8};
+            trc_btc -> {5, 8};
+            ppc_btc -> {5, 8};
+            ppc_usd -> {3, 8};
+            ftc_btc -> {5, 8};
+            xpm_btc -> {5, 8}
+        end).
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
@@ -74,22 +124,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% public BTC-E API (api key not required)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% @doc Retreive the fee for currency pair.
+%% @doc Retrieve the fee for currency pair.
 -spec fee(pair()) -> {ok, number()} | error().
 fee(Pair) ->
     format_result(https(get, format_url(?FEE_URL, Pair))).
 
-%% @doc Retreive the order book for currency pair.
+%% @doc Retrieve the order book for currency pair.
 -spec depth(pair()) -> {ok, proplists:proplist()} | error().
 depth(Pair) ->
     format_result(https(get, format_url(?DEPTH_URL, Pair))).
 
-%% @doc Retreive the ticker for currency pair.
+%% @doc Retrieve the ticker for currency pair.
 -spec ticker(pair()) -> {ok, proplists:proplist()} | error().
 ticker(Pair) ->
     format_result(https(get, format_url(?TICKER_URL, Pair))).
 
-%% @doc Retreive most recent trades for currency pair.
+%% @doc Retrieve most recent trades for currency pair.
 -spec trades(pair()) -> {ok, proplists:proplist()} | error().
 trades(Pair) ->
     format_result(https(get, format_url(?TRADES_URL, Pair))).
@@ -176,7 +226,8 @@ start() ->
 
 %% @doc Return the smallest rate increment for the currency pair.
 pip(Pair) ->
-    math:pow(10, -decimals(rate, Pair)).
+    {Decimals, _} = ?DECIMALS(Pair),
+    math:pow(10, -Decimals).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% private functions
@@ -238,65 +289,13 @@ encode_form_data(Params) ->
 stringify(_, {method, Method}) ->
     lists:flatten(io_lib:format("method=~s", [Method]));
 stringify(Pair, {amount, Amount}) ->
-    Decimals = decimals(amount, Pair),
+    {_, Decimals} = ?DECIMALS(Pair),
     lists:flatten(io_lib:format("amount=~s", [digits(Amount, Decimals)]));
 stringify(Pair, {rate, Rate}) ->
-    Decimals = decimals(rate, Pair),
+    {Decimals, _}  = ?DECIMALS(Pair),
     lists:flatten(io_lib:format("rate=~s", [digits(Rate, Decimals)]));
 stringify(_, {K, V}) ->
     lists:flatten(io_lib:format("~p=~p", [K, V])).
-
--spec decimals(rate | amount, pair()) -> non_neg_integer().
-decimals(rate, btc_usd) -> ?RATE_DECIMALS_BTC_USD;
-decimals(rate, btc_rur) -> ?RATE_DECIMALS_BTC_RUR;
-decimals(rate, btc_eur) -> ?RATE_DECIMALS_BTC_EUR;
-decimals(rate, btc_cnh) -> ?RATE_DECIMALS_BTC_CNH;
-decimals(rate, btc_gbp) -> ?RATE_DECIMALS_BTC_GBP;
-decimals(rate, ltc_btc) -> ?RATE_DECIMALS_LTC_BTC;
-decimals(rate, ltc_usd) -> ?RATE_DECIMALS_LTC_USD;
-decimals(rate, ltc_rur) -> ?RATE_DECIMALS_LTC_RUR;
-decimals(rate, ltc_eur) -> ?RATE_DECIMALS_LTC_EUR;
-decimals(rate, ltc_cnh) -> ?RATE_DECIMALS_LTC_CNH;
-decimals(rate, ltc_gbp) -> ?RATE_DECIMALS_LTC_GBP;
-decimals(rate, nmc_btc) -> ?RATE_DECIMALS_NMC_BTC;
-decimals(rate, nmc_usd) -> ?RATE_DECIMALS_NMC_USD;
-decimals(rate, nvc_btc) -> ?RATE_DECIMALS_NVC_BTC;
-decimals(rate, nvc_usd) -> ?RATE_DECIMALS_NVC_USD;
-decimals(rate, usd_rur) -> ?RATE_DECIMALS_USD_RUR;
-decimals(rate, eur_usd) -> ?RATE_DECIMALS_EUR_USD;
-decimals(rate, eur_rur) -> ?RATE_DECIMALS_EUR_RUR;
-decimals(rate, usd_cnh) -> ?RATE_DECIMALS_USD_CNH;
-decimals(rate, gbp_usd) -> ?RATE_DECIMALS_GBP_USD;
-decimals(rate, trc_btc) -> ?RATE_DECIMALS_TRC_BTC;
-decimals(rate, ppc_btc) -> ?RATE_DECIMALS_PPC_BTC;
-decimals(rate, ppc_usd) -> ?RATE_DECIMALS_PPC_USD;
-decimals(rate, ftc_btc) -> ?RATE_DECIMALS_FTC_BTC;
-decimals(rate, xpm_btc) -> ?RATE_DECIMALS_XPM_BTC;
-decimals(amount, btc_usd) -> ?AMOUNT_DECIMALS_BTC_USD;
-decimals(amount, btc_rur) -> ?AMOUNT_DECIMALS_BTC_RUR;
-decimals(amount, btc_eur) -> ?AMOUNT_DECIMALS_BTC_EUR;
-decimals(amount, btc_cnh) -> ?AMOUNT_DECIMALS_BTC_CNH;
-decimals(amount, btc_gbp) -> ?AMOUNT_DECIMALS_BTC_GBP;
-decimals(amount, ltc_btc) -> ?AMOUNT_DECIMALS_LTC_BTC;
-decimals(amount, ltc_usd) -> ?AMOUNT_DECIMALS_LTC_USD;
-decimals(amount, ltc_rur) -> ?AMOUNT_DECIMALS_LTC_RUR;
-decimals(amount, ltc_eur) -> ?AMOUNT_DECIMALS_LTC_EUR;
-decimals(amount, ltc_cnh) -> ?AMOUNT_DECIMALS_LTC_CNH;
-decimals(amount, ltc_gbp) -> ?AMOUNT_DECIMALS_LTC_GBP;
-decimals(amount, nmc_btc) -> ?AMOUNT_DECIMALS_NMC_BTC;
-decimals(amount, nmc_usd) -> ?AMOUNT_DECIMALS_NMC_USD;
-decimals(amount, nvc_btc) -> ?AMOUNT_DECIMALS_NVC_BTC;
-decimals(amount, nvc_usd) -> ?AMOUNT_DECIMALS_NVC_USD;
-decimals(amount, usd_rur) -> ?AMOUNT_DECIMALS_USD_RUR;
-decimals(amount, eur_usd) -> ?AMOUNT_DECIMALS_EUR_USD;
-decimals(amount, eur_rur) -> ?AMOUNT_DECIMALS_EUR_RUR;
-decimals(amount, usd_cnh) -> ?AMOUNT_DECIMALS_USD_CNH;
-decimals(amount, gbp_usd) -> ?AMOUNT_DECIMALS_GBP_USD;
-decimals(amount, trc_btc) -> ?AMOUNT_DECIMALS_TRC_BTC;
-decimals(amount, ppc_btc) -> ?AMOUNT_DECIMALS_PPC_BTC;
-decimals(amount, ppc_usd) -> ?AMOUNT_DECIMALS_PPC_USD;
-decimals(amount, ftc_btc) -> ?AMOUNT_DECIMALS_FTC_BTC;
-decimals(amount, xpm_btc) -> ?AMOUNT_DECIMALS_XPM_BTC.
 
 %% @doc Return a string representation of a floating point number with a
 %% specific number of decimal places.  This is next to impossible to do

@@ -30,10 +30,8 @@
 -behaviour(application).
 
 %% Application callbacks
--export([start/2,
-         stop/1]).
-
--include("btce.hrl").
+-export([start/2]).
+-export([stop/1]).
 
 %%%===================================================================
 %%% Application callbacks
