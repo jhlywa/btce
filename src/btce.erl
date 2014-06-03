@@ -1,7 +1,7 @@
 %%% ---------------------------------------------------------------------------
 %%% btce: BTC-e API for Erlang systems
 %%%
-%%% Copyright (c) 2013 Jeff Hlywa (jhlywa@gmail.com)
+%%% Copyright (c) 2013-2014, Jeff Hlywa (jhlywa@gmail.com)
 %%%
 %%% Redistribution and use in source and binary forms, with or without
 %%% modification, are permitted provided that the following conditions are met:
